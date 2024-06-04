@@ -1,47 +1,67 @@
-import { useFetchUsersQuery } from "../store/apis/canastaApi";
 import { useState } from "react";
+import { useLoginMutation, useLogoutMutation } from "../store/apis/canastaApi";
 
 function Login() {
-  const { data, isLoading } = useFetchUsersQuery();
-  const [show, setShow] = useState(false);
+  const [login, { data, error, isLoading }] = useLoginMutation();
+  const [loginError, setLoginError] = useState("");
+  const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await login({ email, password }).unwrap();
+      console.log("Login successful")
+    } catch (error) {
+      setLoginError(error.data);
+    }
+  };
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    try {
+      await logout().unwrap();
+      console.log("Logout successful")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold">Login</h1>
-      <form className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Username"
-          className="p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-2 border border-gray-300 rounded"
-        />
-        <button
-          type="submit"
-          className="p-2 bg-sky-500 text-white rounded hover:bg-sky-600"
-          onClick={() => setShow(!show)}
-        >
-          Login
-        </button>
-          <div className="flex flex-col gap-4">
-            {isLoading ? (
-              <p>Loading...</p> 
-            ) : (
-                <div>
-                  <h1 className="font-bold">Look redux is working yayyyyy</h1>
-                  {data.map((user) => (
-                    <div key={user.id}>
-                      <p>{user.name}</p>
-                      <p>{user.role}</p>
-                    </div>
-                  ))}
-                </div>
-            )}
-          </div>
-      </form>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Username"
+        className="p-2 border border-gray-300 rounded"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        className="p-2 border border-gray-300 rounded"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="p-2 bg-sky-500 text-white rounded hover:bg-sky-600"
+      >
+        Login
+      </button>
+      <button
+        onClick={handleLogout}
+        className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+      >
+        Logout
+      </button>
+      <div className="flex flex-col gap-4">
+        {loginError && <p>{loginError}</p>}
+      </div>
+    </form>
     </div>
   );
 }
