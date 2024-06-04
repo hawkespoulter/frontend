@@ -40,7 +40,28 @@ const canastaApi = createApi({
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
           try {
             const { meta } = await queryFulfilled;
-            dispatch(setToken( meta.response.headers.get("authorization"))); // Capture the token on login
+            dispatch(setToken(meta.response.headers.get("authorization"))); // Capture the token on login
+          } catch {
+            // Handle error if needed
+          }
+        },
+      }),
+      signup: builder.mutation({
+        query: (signup) => ({
+          url: "/signup",
+          method: "POST",
+          body: {
+            user: {
+              name: signup.newUsername,
+              email: signup.newEmail,
+              password: signup.newPassword,
+            },
+          },
+        }),
+        async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+          try {
+            const { meta } = await queryFulfilled;
+            dispatch(setToken(meta.response.headers.get("authorization"))); // Capture the token on login
           } catch {
             // Handle error if needed
           }
@@ -73,6 +94,7 @@ const canastaApi = createApi({
 export const {
   useFetchUsersQuery,
   useLoginMutation,
+  useSignupMutation,
   useLogoutMutation,
   useCurrentUserQuery,
 } = canastaApi;
