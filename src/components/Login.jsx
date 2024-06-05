@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useLoginMutation, useLogoutMutation, useSignupMutation } from "../store/apis/canastaApi";
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
   const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   // Sign up state variables
   const [isSignup, setIsSignup] = useState(false);
@@ -16,12 +18,12 @@ function Login() {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const user = await login({ email, password }).unwrap();
-      console.log("Login successful")
-      console.log("user:", user.data);
+      await login({ email, password }).unwrap();
+      navigate('/lobbies');
     } catch (error) {
       setLoginError(error.data);
     }
@@ -31,8 +33,8 @@ function Login() {
     event.preventDefault();
     try {
       console.log(newUsername, newEmail, newPassword)
-      const newUser = await signup({ name: newUsername, email: newEmail, password: newPassword }).unwrap();
-      console.log("newUser:", newUser.data);
+      await signup({ name: newUsername, email: newEmail, password: newPassword }).unwrap();
+      navigate('/lobbies');
     } catch (error) {
       setSignupError(error.data);
     }
@@ -57,17 +59,17 @@ function Login() {
         <form className="flex flex-col gap-4" onSubmit={handleSignup}>
           <input
             type="text"
-            placeholder="Username"
-            className="p-2 border border-gray-300 rounded"
-            value={newUsername}
-            onChange={e => setNewUsername(e.target.value)}
-          />
-          <input
-            type="text"
             placeholder="Email"
             className="p-2 border border-gray-300 rounded"
             value={newEmail}
             onChange={e => setNewEmail(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            className="p-2 border border-gray-300 rounded"
+            value={newUsername}
+            onChange={e => setNewUsername(e.target.value)}
           />
           <input
             type="password"
