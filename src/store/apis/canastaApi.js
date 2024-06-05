@@ -5,13 +5,14 @@ import { setToken, clearToken } from "../slices/authSlice";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3001",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token;
-    if (token) {
-      headers.set("authorization", `${token}`);
-      console.log(headers)
-    }
-    return headers;
-  },
+  const token = getState().auth.token;
+  console.log(token)
+  if (token) {
+    headers.set("authorization", token);
+    console.log(headers)
+  }
+  return headers;
+},
 });
 
 const canastaApi = createApi({
@@ -23,6 +24,13 @@ const canastaApi = createApi({
         providesTags: ["Users"],
         query: () => ({
           url: "/users",
+          method: "GET",
+        }),
+      }),
+      fetchLobbies: builder.query({
+        providesTags: ["Lobbies"],
+        query: () => ({
+          url: "/lobbies",
           method: "GET",
         }),
       }),
@@ -40,7 +48,9 @@ const canastaApi = createApi({
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
           try {
             const { meta } = await queryFulfilled;
-            dispatch(setToken( meta.response.headers.get("authorization"))); // Capture the token on login
+            const token = meta.response.headers.get("authorization");
+            dispatch(setToken( token )); 
+            localStorage.setItem("token", token);
           } catch {
             // Handle error if needed
           }
@@ -75,6 +85,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useCurrentUserQuery,
+  useFetchLobbiesQuery,
 } = canastaApi;
 
 export { canastaApi };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useLoginMutation, useLogoutMutation } from "../store/apis/canastaApi";
 
 function Login() {
@@ -7,12 +8,13 @@ function Login() {
   const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await login({ email, password }).unwrap();
-      console.log("Login successful")
+      navigate('/lobbies');
     } catch (error) {
       setLoginError(error.data);
     }
@@ -34,7 +36,7 @@ function Login() {
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Email"
         className="p-2 border border-gray-300 rounded"
         value={email}
         onChange={e => setEmail(e.target.value)}
