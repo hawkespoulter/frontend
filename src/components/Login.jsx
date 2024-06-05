@@ -32,7 +32,6 @@ function Login() {
   const handleSignup = async (event) => {
     event.preventDefault();
     try {
-      console.log(newUsername, newEmail, newPassword)
       await signup({ name: newUsername, email: newEmail, password: newPassword }).unwrap();
       navigate('/lobbies');
     } catch (error) {
