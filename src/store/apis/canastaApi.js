@@ -1,13 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setToken, clearToken } from "../slices/authSlice";
 
-const KEY_TO_TOKEN = "token";
+const KEY_FOR_TOKEN = "canasta_token";
 
 // Define a base query with token handling
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3001",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token || localStorage.getItem(KEY_TO_TOKEN);
+    // Either get the token from redux store or local storage. Allows for login persistence
+    const token = getState().auth.token || localStorage.getItem(KEY_FOR_TOKEN
     // console.log(token);
 
     if (token) {
@@ -76,7 +77,7 @@ const canastaApi = createApi({
             const { meta } = await queryFulfilled;
             const token = meta.response.headers.get("authorization");
             dispatch(setToken(token));
-            localStorage.setItem(KEY_TO_TOKEN, token);
+            localStorage.setItem(KEY_TO_TOKEN, token); // save the token when a page refresh occurs
           } catch {
             // Handle error if needed
           }
@@ -91,6 +92,7 @@ const canastaApi = createApi({
           try {
             await queryFulfilled;
             dispatch(clearToken()); // Clear the token on logout
+            localStorage.removeItem(KEY_FOR_TOKEN); // Remove the now old token from local storage
           } catch {
             // Handle error if needed
           }
