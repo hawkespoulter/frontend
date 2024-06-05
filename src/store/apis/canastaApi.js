@@ -30,6 +30,13 @@ const canastaApi = createApi({
           method: "GET",
         }),
       }),
+      fetchLobbies: builder.query({
+        providesTags: ["Lobbies"],
+        query: () => ({
+          url: "/lobbies",
+          method: "GET",
+        }),
+      }),
       login: builder.mutation({
         query: (login) => ({
           url: "/login",
@@ -105,6 +112,7 @@ export const {
   useSignupMutation,
   useLogoutMutation,
   useCurrentUserQuery,
+  useFetchLobbiesQuery,
 } = canastaApi;
 
 export { canastaApi };
