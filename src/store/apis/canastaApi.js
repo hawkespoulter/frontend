@@ -52,14 +52,15 @@ const canastaApi = createApi({
           method: "POST",
           body: {
             user: {
-              name: signup.newUsername,
-              email: signup.newEmail,
-              password: signup.newPassword,
+              name: signup.name,
+              email: signup.email,
+              password: signup.password,
             },
           },
         }),
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
           try {
+            console.log("arg:", arg);
             const { meta } = await queryFulfilled;
             dispatch(setToken(meta.response.headers.get("authorization"))); // Capture the token on login
           } catch {

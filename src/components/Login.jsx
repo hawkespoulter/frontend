@@ -4,7 +4,7 @@ import { useLoginMutation, useLogoutMutation, useSignupMutation } from "../store
 function Login() {
   const [login, { data, error, isLoading }] = useLoginMutation();
   const [loginError, setLoginError] = useState("");
-  const [signup] = useSignupMutation();
+  const [signup, { data: newUserData }] = useSignupMutation();
   const [signupError, setSignupError] = useState("");
   const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
   const [email, setEmail] = useState('');
@@ -19,8 +19,9 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await login({ email, password }).unwrap();
+      const user = await login({ email, password }).unwrap();
       console.log("Login successful")
+      console.log("user:", user.data);
     } catch (error) {
       setLoginError(error.data);
     }
@@ -30,8 +31,8 @@ function Login() {
     event.preventDefault();
     try {
       console.log(newUsername, newEmail, newPassword)
-      await signup({ newUsername, newEmail, newPassword }).unwrap();
-      console.log("Login successful")
+      const newUser = await signup({ name: newUsername, email: newEmail, password: newPassword }).unwrap();
+      console.log("newUser:", newUser.data);
     } catch (error) {
       setSignupError(error.data);
     }
