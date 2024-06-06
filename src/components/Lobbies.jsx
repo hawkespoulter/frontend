@@ -49,7 +49,8 @@ function Lobbies() {
       {lobbiesData.map(lobby => (
         <div key={lobby.id} className="bg-sky-500 p-4 m-4 text-white">
           <p>{lobby.game}</p>
-          <p>Put some info in here. Player count, names, etc. Maybe some player icons.</p>
+          <p>Owner: <b>{lobby.owner.name}</b></p>
+          <p>Player(s): <b>{lobby.player_count}</b></p>
         </div>
       ))}
     </div>
