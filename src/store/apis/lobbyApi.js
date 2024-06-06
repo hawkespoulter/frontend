@@ -32,13 +32,23 @@ const lobbyApi = createApi({
       }),
       createLobby: builder.mutation({
         query: (lobby) => ({
-          url: "/create",
+          url: "/lobbies",
           method: "POST",
           body: {
             game: lobby.game,
             is_active: false // A new lobby is never active upon creation 
           }
-        })
+        }),
+        async onQueryStarted(args, { dispatch, queryFulfilled }) {
+          try {
+            console.log("createLobby args:", args);
+            const { meta } = await queryFulfilled;
+            console.log("meta:", meta);
+          } catch (error) {
+            console.log("ERROR @createLobby onQueryStarted")
+            console.error(error);
+          }
+        }
       }),
     };
   },
