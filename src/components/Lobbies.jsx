@@ -1,9 +1,10 @@
 import { useCurrentUserQuery } from "../store/apis/canastaApi";
-import { useCreateLobbyMutation, useFetchLobbiesQuery } from "../store/apis/lobbyApi";
+import { useCreateLobbyMutation, useFetchLobbiesQuery, useJoinLobbyMutation } from "../store/apis/lobbyApi";
 
 function Lobbies() {
   const { refetch: getLobbies, data: lobbiesData, error, isLoading } = useFetchLobbiesQuery();
   const [createLobby, { data: createLobbyData }] = useCreateLobbyMutation();
+  const [joinLobby, { data: joinLobbyData }] = useJoinLobbyMutation();
   const { data: currentUser, isLoading: loadingUser } = useCurrentUserQuery();
 
   if (isLoading) {
@@ -21,7 +22,7 @@ function Lobbies() {
   const handleCreateLobby = async () => {
     try {
       await createLobby({ game: "canasta" });
-      console.log("lobbyData:", createLobbyData);
+      console.log("createLobbyData:", createLobbyData);
 
       await getLobbies();
       console.log("lobbiesData:", lobbiesData);
@@ -31,9 +32,15 @@ function Lobbies() {
     }
   }
 
-  const handleJoinLobby = async () => {
+  const handleJoinLobby = async (lobbyId) => {
     try {
+      await joinLobby({ id: lobbyId });
+      console.log("joinLobbyData:", joinLobbyData);
 
+      // Probably will delete this later when the user will get redirected to the Lobby page.
+      // This is for testing so we can see if the lobbies really did get properly updated
+      await getLobbies();
+      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
     }
@@ -73,14 +80,14 @@ function Lobbies() {
             {lobby.owner && lobby.owner.id === currentUser.id &&
               <button
                 className="bg-red-700 hover:bg-red-900 text-white font-bold  w-auto p-2 mx-2 rounded"
-                onClick={() => handleDeleteLobby()}
+                onClick={() => handleDeleteLobby(lobby.id)}
               >
                 Delete
               </button>
             }
             <button
               className="bg-green-700 hover:bg-green-900 text-white font-bold  w-auto p-2 mx-2 rounded"
-              onClick={() => handleJoinLobby()}
+              onClick={() => handleJoinLobby(lobby.id)}
             >
               Join
             </button>

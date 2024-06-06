@@ -32,7 +32,7 @@ const lobbyApi = createApi({
       }),
       createLobby: builder.mutation({
         query: (lobby) => ({
-          url: "/lobbies",
+          url: `/lobbies/${lobby.id}`,
           method: "POST",
           body: {
             game: lobby.game,
@@ -50,6 +50,24 @@ const lobbyApi = createApi({
           }
         }
       }),
+      joinLobby: builder.mutation({
+        query: (lobby) => ({
+          url: `/lobbies/${lobby.id}`,
+          method: "PATCH",
+          body: {
+            lobby_id: lobby.id
+          }
+        })
+      }),
+      // deleteLobby: builder.mutation({
+      //   query: (lobby) => ({
+      //     url: "/lobbies",
+      //     method: "DESTROY",
+      //     body: {
+      //       lobby_id: lobby.id
+      //     }
+      //   })
+      // }),
     };
   },
 });
@@ -57,6 +75,7 @@ const lobbyApi = createApi({
 export const {
   useFetchLobbiesQuery,
   useCreateLobbyMutation,
+  useJoinLobbyMutation,
 } = lobbyApi;
 
 export { lobbyApi };
