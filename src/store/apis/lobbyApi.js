@@ -59,6 +59,15 @@ const lobbyApi = createApi({
           }
         })
       }),
+      leaveLobby: builder.mutation({
+        query: (lobby) => ({
+          url: `/lobbies/${lobby.id}/leave`,
+          method: "POST",
+          body: {
+            lobby_id: lobby.id
+          }
+        })
+      }),
       // deleteLobby: builder.mutation({
       //   query: (lobby) => ({
       //     url: "/lobbies",
@@ -75,6 +84,7 @@ const lobbyApi = createApi({
 export const {
   useFetchLobbiesQuery,
   useCreateLobbyMutation,
+  useLeaveLobbyMutation,
   useJoinLobbyMutation,
 } = lobbyApi;
 
