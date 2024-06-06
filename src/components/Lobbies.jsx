@@ -31,6 +31,22 @@ function Lobbies() {
     }
   }
 
+  const handleJoinLobby = async () => {
+    try {
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleDeleteLobby = async () => {
+    try {
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className="flex">
       <div className="flex flex-col items-center">
@@ -51,6 +67,24 @@ function Lobbies() {
           <p>{lobby.game}</p>
           <p>Owner: <b>{lobby.owner.name}</b></p>
           <p>Player(s): <b>{lobby.player_count}</b></p>
+
+          <br />
+          <div className="flex justify-center">
+            {lobby.owner && lobby.owner.id === currentUser.id &&
+              <button
+                className="bg-red-700 hover:bg-red-900 text-white font-bold  w-auto p-2 mx-2 rounded"
+                onClick={() => handleDeleteLobby()}
+              >
+                Delete
+              </button>
+            }
+            <button
+              className="bg-green-700 hover:bg-green-900 text-white font-bold  w-auto p-2 mx-2 rounded"
+              onClick={() => handleJoinLobby()}
+            >
+              Join
+            </button>
+          </div>
         </div>
       ))}
     </div>
