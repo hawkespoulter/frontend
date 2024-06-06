@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation, useLogoutMutation, useSignupMutation } from "../store/apis/canastaApi";
+import { useLoginMutation, useSignupMutation } from "../store/apis/canastaApi";
 
 function Login() {
   const [login, { data, error, isLoading }] = useLoginMutation();
   const [loginError, setLoginError] = useState("");
   const [signup, { data: newUserData }] = useSignupMutation();
   const [signupError, setSignupError] = useState("");
-  const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -38,16 +37,6 @@ function Login() {
       setSignupError(error.data);
     }
   };
-
-  const handleLogout = async (event) => {
-    event.preventDefault();
-    try {
-      await logout().unwrap();
-      console.log("Logout successful")
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
 
   const renderSignup = () => {
@@ -127,15 +116,6 @@ function Login() {
             >
               Login
             </button>
-            <button
-              onClick={handleLogout}
-              className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-            <div className="flex flex-col gap-4">
-              {loginError && <p>{loginError}</p>}
-            </div>
           </form>
 
           <p>Sign Up{' '}
@@ -143,6 +123,9 @@ function Login() {
               here
             </button>
           </p>
+          <div className="flex flex-col gap-4 text-red-500">
+            {loginError && <p>{loginError}</p>}
+          </div>
         </>
       }
     </div>
