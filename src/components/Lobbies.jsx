@@ -1,4 +1,5 @@
-import { useFetchLobbiesQuery, useCurrentUserQuery } from "../store/apis/canastaApi";
+import { useCurrentUserQuery } from "../store/apis/canastaApi";
+import { useFetchLobbiesQuery } from "../store/apis/lobbyApi";
 
 function Lobbies() {
   const { data, error, isLoading } = useFetchLobbiesQuery();
