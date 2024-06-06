@@ -3,7 +3,7 @@ import { useCurrentUserQuery, useLogoutMutation } from "../store/apis/canastaApi
 
 function Navbar() {
   const { data: currentUser, isLoading: loadingUser } = useCurrentUserQuery();
-  const [logout, { data: logoutData, error: logoutError, isLoading: logoutIsLoading }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   if (loadingUser) {
     return <div>Loading...</div>; // Optional: Show loading indicator
@@ -24,7 +24,8 @@ function Navbar() {
     <div className="flex flex-row justify-end gap-4 p-4 w-full top-0 fixed z-50 font-bold bg-slate-900 text-white">
       {currentUser ? (
         <div className="flex flex-row gap-4">
-          <Link to={`/users/${currentUser.id}`}>PFP GO HERE</Link>
+          <Link to={`/lobbies`}>Lobbies</Link>
+          <Link to={`/profile`}>PFP GO HERE</Link>
           <div
             onClick={handleLogout}
             className="text-white"

@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "./Login.jsx";
 import Lobbies from "./Lobbies.jsx";
+import Profile from "./Profile.jsx";
 import { useCurrentUserQuery } from "../store/apis/canastaApi";
 
 function RequireAuth({ children }) {
@@ -21,8 +22,11 @@ function RequireAuth({ children }) {
 function AppRoutes() {
   return (
     <Routes>
-      <Route exact path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/lobbies" element={<RequireAuth><Lobbies /></RequireAuth>} />
+      {/* The below is good for redirect once we fix the required auth. I need to do a better job figuring out how to do that. */}
+      <Route path="*" element={<Navigate to="/lobbies" />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }
