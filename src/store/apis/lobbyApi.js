@@ -32,7 +32,7 @@ const lobbyApi = createApi({
       }),
       createLobby: builder.mutation({
         query: (lobby) => ({
-          url: `/lobbies/${lobby.id}`,
+          url: `/lobbies/`,
           method: "POST",
           body: {
             game: lobby.game,
