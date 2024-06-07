@@ -23,12 +23,21 @@ function Lobbies() {
     return <div>Loading user...</div>
   }
 
+  const refreshLobbies = async () => {
+    try {
+      await getLobbies();
+    } catch (error) {
+      console.log("Couldn't get lobbies")
+      console.error(error);
+    }
+  }
+
   const handleCreateLobby = async () => {
     try {
       await createLobby({ game: "canasta" });
       console.log("createLobbyData:", createLobbyData);
 
-      await getLobbies();
+      await refreshLobbies();
       console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.log("Couldn't create lobby");
@@ -43,7 +52,7 @@ function Lobbies() {
 
       // Probably will delete this later when the user will get redirected to the Lobby page.
       // This is for testing so we can see if the lobbies really did get properly updated
-      await getLobbies();
+      await refreshLobbies();
       console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
@@ -55,9 +64,7 @@ function Lobbies() {
       await leaveLobby({ id: lobbyId });
       console.log("leaveLobbyData:", leaveLobbyData);
 
-      // Probably will delete this later when the user will get redirected to the Lobby page.
-      // This is for testing so we can see if the lobbies really did get properly updated
-      await getLobbies();
+      await refreshLobbies();
       console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
@@ -69,9 +76,7 @@ function Lobbies() {
       await deleteLobby({ id: lobbyId })
       console.log("deleteLobbyData:", deleteLobbyData);
 
-      // Probably will delete this later when the user will get redirected to the Lobby page.
-      // This is for testing so we can see if the lobbies really did get properly updated
-      await getLobbies();
+      await refreshLobbies();
       console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
@@ -86,10 +91,17 @@ function Lobbies() {
         </div>
 
         <button
-          className="bg-sky-600 hover:bg-sky-900 text-white font-bold  w-40 p-2 rounded"
+          className="bg-sky-600 hover:bg-sky-900 text-white font-bold w-40 p-2 m-2 rounded"
           onClick={() => handleCreateLobby()}
         >
           Create Lobby
+        </button>
+
+        <button
+          className="bg-sky-600 hover:bg-sky-900 text-white font-bold w-40 p-2 m-2 rounded"
+          onClick={() => refreshLobbies()}
+        >
+          Refresh Lobbies
         </button>
       </div>
 
@@ -122,7 +134,6 @@ function Lobbies() {
                 }
               </>
             }
-
 
 
             <button
