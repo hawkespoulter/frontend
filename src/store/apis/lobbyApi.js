@@ -52,8 +52,8 @@ const lobbyApi = createApi({
       }),
       joinLobby: builder.mutation({
         query: (lobby) => ({
-          url: `/lobbies/${lobby.id}`,
-          method: "PATCH",
+          url: `/lobbies/${lobby.id}/join`,
+          method: "POST",
           body: {
             lobby_id: lobby.id
           }
