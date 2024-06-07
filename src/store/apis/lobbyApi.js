@@ -68,15 +68,15 @@ const lobbyApi = createApi({
           }
         })
       }),
-      // deleteLobby: builder.mutation({
-      //   query: (lobby) => ({
-      //     url: "/lobbies",
-      //     method: "DESTROY",
-      //     body: {
-      //       lobby_id: lobby.id
-      //     }
-      //   })
-      // }),
+      deleteLobby: builder.mutation({
+        query: (lobby) => ({
+          url: `/lobbies/${lobby.id}`,
+          method: "DELETE",
+          body: {
+            lobby_id: lobby.id
+          }
+        })
+      }),
     };
   },
 });
@@ -86,6 +86,7 @@ export const {
   useCreateLobbyMutation,
   useLeaveLobbyMutation,
   useJoinLobbyMutation,
+  useDeleteLobbyMutation,
 } = lobbyApi;
 
 export { lobbyApi };
