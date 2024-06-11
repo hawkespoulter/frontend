@@ -109,7 +109,7 @@ function Lobbies() {
         <div key={lobby.id} className="bg-sky-500 p-4 m-4 text-white">
           <p>{lobby.id}</p>
           <p>{lobby.game}</p>
-          <p>Owner: <b>{lobby.owner.name}</b></p>
+          <p>Owner: <b>{lobby.owner.name} {lobby.owner.id === currentUser.id && "(you)"}</b></p>
           <p>Player(s): <b>{lobby.player_count}</b></p>
 
           <br />
