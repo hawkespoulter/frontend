@@ -1,3 +1,4 @@
+import React from "react";
 import { useCurrentUserQuery } from "../store/apis/canastaApi";
 import { useCreateLobbyMutation, useDeleteLobbyMutation, useFetchLobbiesQuery, useJoinLobbyMutation, useLeaveLobbyMutation } from "../store/apis/lobbyApi";
 
@@ -8,8 +9,6 @@ function Lobbies() {
   const [leaveLobby, { data: leaveLobbyData }] = useLeaveLobbyMutation();
   const [deleteLobby, { data: deleteLobbyData }] = useDeleteLobbyMutation();
   const { data: currentUser, isLoading: loadingUser } = useCurrentUserQuery();
-
-  console.log(lobbiesData);
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -26,6 +25,7 @@ function Lobbies() {
   const refreshLobbies = async () => {
     try {
       await getLobbies();
+      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.log("Couldn't get lobbies")
       console.error(error);
@@ -35,10 +35,9 @@ function Lobbies() {
   const handleCreateLobby = async () => {
     try {
       await createLobby({ game: "canasta" });
-      console.log("createLobbyData:", createLobbyData);
+      // console.log("createLobbyData:", createLobbyData);
 
       await refreshLobbies();
-      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.log("Couldn't create lobby");
       console.error(error);
@@ -48,12 +47,11 @@ function Lobbies() {
   const handleJoinLobby = async (lobbyId) => {
     try {
       await joinLobby({ id: lobbyId });
-      console.log("joinLobbyData:", joinLobbyData);
+      // console.log("joinLobbyData:", joinLobbyData);
 
       // Probably will delete this later when the user will get redirected to the Lobby page.
       // This is for testing so we can see if the lobbies really did get properly updated
       await refreshLobbies();
-      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
     }
@@ -62,10 +60,9 @@ function Lobbies() {
   const handleLeaveLobby = async (lobbyId) => {
     try {
       await leaveLobby({ id: lobbyId });
-      console.log("leaveLobbyData:", leaveLobbyData);
+      // console.log("leaveLobbyData:", leaveLobbyData);
 
       await refreshLobbies();
-      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
     }
@@ -74,13 +71,25 @@ function Lobbies() {
   const handleDeleteLobby = async (lobbyId) => {
     try {
       await deleteLobby({ id: lobbyId })
-      console.log("deleteLobbyData:", deleteLobbyData);
+      // console.log("deleteLobbyData:", deleteLobbyData);
 
       await refreshLobbies();
-      console.log("lobbiesData:", lobbiesData);
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const renderPlayersList = (lobby) => {
+    return (
+      <>
+        {lobby.players.map(player => (
+          <React.Fragment key={player.id}>
+            <p><b>P{player.player_number}: </b>{player.name}</p>
+          </React.Fragment>
+        ))
+        }
+      </>
+    )
   }
 
   return (
@@ -111,6 +120,8 @@ function Lobbies() {
           <p>{lobby.game}</p>
           <p>Owner: <b>{lobby.owner.name} {lobby.owner.id === currentUser.id && "(you)"}</b></p>
           <p>Player(s): <b>{lobby.player_count}</b></p>
+
+          {renderPlayersList(lobby)}
 
           <br />
           <div className="flex justify-center">
