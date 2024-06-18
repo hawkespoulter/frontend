@@ -41,12 +41,12 @@ const lobbyApi = createApi({
         }),
         async onQueryStarted(args, { dispatch, queryFulfilled }) {
           try {
-            console.log("createLobby args:", args);
+            // console.log("createLobby args:", args);
             const { meta } = await queryFulfilled;
             console.log("meta:", meta);
           } catch (error) {
             console.log("ERROR @createLobby onQueryStarted")
-            console.error(error);
+            console.error(error.error.data.error);
           }
         }
       }),
@@ -57,7 +57,17 @@ const lobbyApi = createApi({
           body: {
             lobby_id: lobby.id
           }
-        })
+        }),
+        async onQueryStarted(args, { dispatch, queryFulfilled }) {
+          try {
+            // console.log("createLobby args:", args);
+            const { meta } = await queryFulfilled;
+            console.log("meta:", meta);
+          } catch (error) {
+            console.log("ERROR @joinLobby onQueryStarted")
+            console.error(error.error.data.error);
+          }
+        }
       }),
       leaveLobby: builder.mutation({
         query: (lobby) => ({

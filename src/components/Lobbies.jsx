@@ -4,8 +4,8 @@ import { useCreateLobbyMutation, useDeleteLobbyMutation, useFetchLobbiesQuery, u
 
 function Lobbies() {
   const { refetch: getLobbies, data: lobbiesData, error, isLoading } = useFetchLobbiesQuery();
-  const [createLobby, { data: createLobbyData }] = useCreateLobbyMutation();
-  const [joinLobby, { data: joinLobbyData }] = useJoinLobbyMutation();
+  const [createLobby, { data: createLobbyData, error: createLobbyError }] = useCreateLobbyMutation();
+  const [joinLobby, { data: joinLobbyData, error: joinLobbyError }] = useJoinLobbyMutation();
   const [leaveLobby, { data: leaveLobbyData }] = useLeaveLobbyMutation();
   const [deleteLobby, { data: deleteLobbyData }] = useDeleteLobbyMutation();
   const { data: currentUser, isLoading: loadingUser } = useCurrentUserQuery();
@@ -41,6 +41,7 @@ function Lobbies() {
     } catch (error) {
       console.log("Couldn't create lobby");
       console.error(error);
+      console.error(createLobbyError);
     }
   }
 
@@ -54,6 +55,7 @@ function Lobbies() {
       await refreshLobbies();
     } catch (error) {
       console.error(error)
+      console.error(joinLobbyError.error)
     }
   }
 
