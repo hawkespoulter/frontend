@@ -51,6 +51,7 @@ const canastaApi = createApi({
         }),
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
           try {
+            localStorage.removeItem(KEY_FOR_TOKEN); // Remove the soon-to-be-old token from local storage
             const { meta } = await queryFulfilled;
             const token = meta.response.headers.get("authorization");
             dispatch(setToken(token));
